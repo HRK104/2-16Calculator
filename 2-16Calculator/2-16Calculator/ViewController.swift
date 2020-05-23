@@ -25,6 +25,15 @@ class ViewController: UIViewController {
 //    var hexdecColor = false
     
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool{
+        textField.resignFirstResponder()
+        return (true)
+    }
+    
     @IBOutlet weak var selectionResult: UILabel!
     @IBOutlet weak var enterField: UITextField!
     
@@ -44,67 +53,6 @@ class ViewController: UIViewController {
     }
     
     
-    
-//    @IBAction func binaryButton(_ sender: UIButton) {
-//        binaryColor = true
-//        decimalColor = false
-//        hexdecColor = false
-//        enteredCondition.text = "Binary"
-//    }
-//    
-//    @IBAction func decimalButton(_ sender: UIButton) {
-//        binaryColor = false
-//        decimalColor = true
-//        hexdecColor = false
-//        enteredCondition.text = "Decimal"
-//    }
-//    
-//    @IBAction func Hexdec(_ sender: UIButton) {
-//        binaryColor = false
-//        decimalColor = false
-//        hexdecColor = true
-//        enteredCondition.text = "Hexdec"
-//    }
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    @IBAction func setTextButton(_ sender: UIButton) {
-//        let mtext = textField.text
-//        let number = mtext ?? ""
-//        
-//        if binaryColor && !decimalColor && !hexdecColor{
-//            let decimalNumber = Int(number, radix: 2)!
-//            let hexNumber = String(Int(number, radix: 2)!, radix: 16)
-//            
-//            BinaryAnswer.text = number
-//            DecimalAnswer.text = String(decimalNumber)
-//            HexdecAnswer.text = hexNumber
-//        }
-//        else if !binaryColor && decimalColor && !hexdecColor{
-//            let binaryNumber = String((Int(number) ?? 0), radix: 2)
-//            let hexNumber = String((Int(number) ?? 0), radix: 16)
-//            
-//            BinaryAnswer.text = binaryNumber
-//            DecimalAnswer.text = number
-//            HexdecAnswer.text = hexNumber
-//        }
-//        else if !binaryColor && !decimalColor && hexdecColor{
-//            let binaryNumber = String(Int(number, radix: 16)!, radix: 2)
-//            let decimalNumber = Int(number, radix: 16)!
-//            
-//            BinaryAnswer.text = binaryNumber
-//            DecimalAnswer.text = String(decimalNumber)
-//            HexdecAnswer.text = number
-//        }
-//        
-//    }
-    
-    
     @IBAction func binaryButton(_ sender: UIButton) {
         binaryCondition = true;
         decimalCondition = false;
@@ -120,6 +68,8 @@ class ViewController: UIViewController {
         selectionResult.text = "Decimal"
     }
     
+    
+    
     @IBAction func hexdecButton(_ sender: UIButton) {
         binaryCondition = false;
         decimalCondition = false;
@@ -132,28 +82,120 @@ class ViewController: UIViewController {
                 let number = mtext ?? ""
         
                 if binaryCondition && !decimalCondition && !hexdecCondition{
-                    let decimalNumber = Int(number, radix: 2)!
-                    let hexNumber = String(Int(number, radix: 2)!, radix: 16)
-        
-                    binaryValue.text = number
-                    decimalValue.text = String(decimalNumber)
-                    hexdecValue.text = hexNumber
+                    
+                    // check the entered number is calculatable
+                    var canCalculate = true;
+                    var countNum = 0
+                    while countNum < number.count && canCalculate == true{
+                        let aCharacter = number[number.index(number.startIndex, offsetBy: countNum)..<number.index(number.startIndex, offsetBy: countNum+1)]
+
+                        print(aCharacter)
+                        if(aCharacter == "0" || aCharacter == "1") {
+                            canCalculate = true;
+                        }
+                        else{
+                            canCalculate = false;
+                            print("cant calculate")
+                        }
+                        
+                        countNum += 1
+                    }
+                    if(canCalculate){ // if it is calculatable
+                        let decimalNumber = Int(number, radix: 2)!
+                        let hexNumber = String(Int(number, radix: 2)!, radix: 16)
+
+                        binaryValue.text = number
+                        decimalValue.text = String(decimalNumber)
+                        hexdecValue.text = hexNumber
+                    }
+                    else{
+                        print("can't calculate")
+                    }
+                    
                 }
                 else if !binaryCondition && decimalCondition && !hexdecCondition{
-                    let binaryNumber = String((Int(number) ?? 0), radix: 2)
-                    let hexNumber = String((Int(number) ?? 0), radix: 16)
-        
-                    binaryValue.text = binaryNumber
-                    decimalValue.text = number
-                    hexdecValue.text = hexNumber
+//                    let binaryNumber = String((Int(number) ?? 0), radix: 2)
+//                    let hexNumber = String((Int(number) ?? 0), radix: 16)
+//
+//                    binaryValue.text = binaryNumber
+//                    decimalValue.text = number
+//                    hexdecValue.text = hexNumber
+                    
+                    // check the entered number is calculatable
+                    var canCalculate = true;
+                    var countNum = 0;
+                    while countNum < number.count && canCalculate == true{
+                        let aCharacter = number[number.index(number.startIndex, offsetBy: countNum)..<number.index(number.startIndex, offsetBy: countNum+1)]
+
+                        if(aCharacter == "0" || aCharacter == "1" || aCharacter == "2"
+                            || aCharacter == "3" || aCharacter == "4" || aCharacter == "5"
+                            || aCharacter == "6" || aCharacter == "7" || aCharacter == "8"
+                            || aCharacter == "9") {
+                            canCalculate = true;
+                        }
+                        else{
+                            canCalculate = false
+                        }
+                        print(aCharacter)
+                        
+                        countNum += 1
+                    }
+                    if(canCalculate){ // if it is calculatable
+                        let binaryNumber = String((Int(number) ?? 0), radix: 2)
+                        let hexNumber = String((Int(number) ?? 0), radix: 16)
+                        
+                        binaryValue.text = binaryNumber
+                        decimalValue.text = number
+                        hexdecValue.text = hexNumber
+                    }
+                    else{
+                        print("can't calculate in decimal")
+                    }
                 }
                 else if !binaryCondition && !decimalCondition && hexdecCondition{
-                    let binaryNumber = String(Int(number, radix: 16)!, radix: 2)
-                    let decimalNumber = Int(number, radix: 16)!
-        
-                    binaryValue.text = binaryNumber
-                    decimalValue.text = String(decimalNumber)
-                    hexdecValue.text = number
+//                    let binaryNumber = String(Int(number, radix: 16)!, radix: 2)
+//                    let decimalNumber = Int(number, radix: 16)!
+//
+//                    binaryValue.text = binaryNumber
+//                    decimalValue.text = String(decimalNumber)
+//                    hexdecValue.text = number
+                    
+                    
+                    
+                    // check the entered number is calculatable
+                    var canCalculate = true;
+                    var countNum = 0;
+                    while countNum < number.count && canCalculate == true{
+                        let aCharacter = number[number.index(number.startIndex, offsetBy: countNum)..<number.index(number.startIndex, offsetBy: countNum+1)]
+
+                        if(aCharacter == "0" || aCharacter == "1" || aCharacter == "2"
+                            || aCharacter == "3" || aCharacter == "4" || aCharacter == "5"
+                            || aCharacter == "6" || aCharacter == "7" || aCharacter == "8"
+                            || aCharacter == "9" || aCharacter == "a" || aCharacter == "b"
+                            || aCharacter == "c" || aCharacter == "d" || aCharacter == "e"
+                            || aCharacter == "f" || aCharacter == "A" || aCharacter == "B"
+                            || aCharacter == "C" || aCharacter == "D" || aCharacter == "E"
+                            || aCharacter == "F") {
+                            canCalculate = true;
+                        }
+                        else{
+                            canCalculate = false
+                        }
+                        print(aCharacter)
+                        
+                        countNum += 1
+                    }
+                    if(canCalculate){ // if it is calculatable
+                        let binaryNumber = String(Int(number, radix: 16)!, radix: 2)
+                        let decimalNumber = Int(number, radix: 16)!
+                        
+                        binaryValue.text = binaryNumber
+                        decimalValue.text = String(decimalNumber)
+                        hexdecValue.text = number
+                    }
+                    else{
+                        print("can't calculate in hexdec")
+                    }
                 }
     }
     
